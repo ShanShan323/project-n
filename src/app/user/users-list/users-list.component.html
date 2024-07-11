@@ -1,0 +1,12 @@
+<div class="users-list">
+  <ng-container *ngFor="let user of users$ | async">
+    <app-user-card
+      [user]="user"
+      (deleteUser)="deleteUser($event)"
+      (editUser)="editUser($event)"
+    ></app-user-card>
+  </ng-container>
+  <button mat-raised-button color="primary" (click)="addUser()">
+    Добавить пользователя
+  </button>
+</div>
