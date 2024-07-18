@@ -13,11 +13,11 @@ import {
   ReactiveFormsModule,
   FormControl,
 } from '@angular/forms';
-import { User } from '../../core/models/user.interface';
+import { UserVM } from '../user-vm';
 
 export interface DialogData {
   isEdit: boolean;
-  user: User;
+  user: UserVM;
 }
 @Component({
   selector: 'app-create-edit-user',
@@ -34,7 +34,6 @@ export interface DialogData {
 })
 export class CreateEditUserComponent {
   public data = inject(MAT_DIALOG_DATA);
-  
   form: FormGroup;
 
   constructor(

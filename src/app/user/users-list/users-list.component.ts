@@ -1,14 +1,12 @@
-import { Component, inject } from '@angular/core';
-import { UsersApiServiceService } from '../../core/services/users-api-service.service';
-import { UsersServiceService } from '../../core/services/users-service.service';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { CommonModule } from '@angular/common';
-import { User } from '../../core/models/user.interface';
-import { MatDialog } from '@angular/material/dialog';
 import {
   CreateEditUserComponent,
   DialogData,
 } from '../create-edit-user/create-edit-user.component';
+import { UserVM } from '../user-vm';
+import { User } from '../user-model/user.dto-model';
 
 @Component({
   selector: 'app-users-list',
@@ -18,43 +16,24 @@ import {
   imports: [UserCardComponent, CommonModule],
 })
 export class UsersListComponent {
-  private usersApiService = inject(UsersApiServiceService);
-  private usersService = inject(UsersServiceService);
-  private dialog = inject(MatDialog);
+  @Input() users!: UserVM[];
+  @Output() deleteUser: EventEmitter<UserVM> = new EventEmitter<UserVM>();
+  @Output() editUser: EventEmitter<UserVM> = new EventEmitter<UserVM>();
+  @Output() addUser: EventEmitter<UserVM> = new EventEmitter<UserVM>();
 
-  users$ = this.usersService.users$;
-
-  deleteUser(user: User) {
-    if (user.id) {
-      this.usersService.deleteUser(user.id);
-    }
+  constructor(){
+    console.log('user-list',this.users)
   }
 
-  addUser() {
-    const dialogRef = this.dialog.open(CreateEditUserComponent, {
-      data: {
-        isEdit: false,
-      } as DialogData,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        return;
-      }
-      this.usersService.createUser(result);
-    });
+  onDelete(user: UserVM) {
+    this.deleteUser.emit(user);
   }
 
-  editUser(user: User) {
-    const dialogRef = this.dialog.open(CreateEditUserComponent, {
-      data: {
-        isEdit: true,
-        user,
-      } as DialogData,
-    });
+  onAddUser() {
+    this.addUser.emit();
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      this.usersService.editUser(result);
-    });
+  onEditUser(user: UserVM) {
+    this.editUser.emit(user);
   }
 }

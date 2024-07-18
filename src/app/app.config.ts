@@ -3,7 +3,33 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideEffects } from '@ngrx/effects';
+import { isDevMode } from '@angular/core';
+import { usersEffects } from './user/users-state/users.effect';
+import {
+  USERS_FEATURE_KEY,
+  usersReducer,
+} from './user/users-state/users.reducer';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(), provideAnimationsAsync()],
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(),
+    provideAnimationsAsync(),
+    provideStore({
+      [USERS_FEATURE_KEY]: usersReducer,
+    }),
+    provideEffects({
+      usersEffects
+    }),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: false,
+      traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
+    }),
+  ],
 };

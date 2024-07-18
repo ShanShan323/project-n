@@ -1,0 +1,9 @@
+<ng-container *ngrxLet="users$ as users">
+  <app-users-list 
+    [users]="users"
+    (deleteUser)="onDelete($event)"
+    (editUser)="onEditUser($event)"
+    (addUser)="onAddUser()"
+  >
+  </app-users-list>
+</ng-container>

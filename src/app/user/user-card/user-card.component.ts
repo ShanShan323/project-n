@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { User } from '../../core/models/user.interface';
+import { UserVM } from '../user-vm';
+import { User } from '../user-model/user.dto-model';
 
 @Component({
   selector: 'app-user-card',
@@ -9,15 +10,15 @@ import { User } from '../../core/models/user.interface';
   styleUrl: './user-card.component.scss',
 })
 export class UserCardComponent {
-  @Input() user!: User;
-  @Output() deleteUser = new EventEmitter<User>();
-  @Output() editUser = new EventEmitter<User>();
+  @Input() user!: UserVM;
+  @Output() deleteUser = new EventEmitter<UserVM>();
+  @Output() editUser = new EventEmitter<UserVM>();
 
-  delete() {
+  onDelete() {
     this.deleteUser.emit(this.user);
   }
 
-  edit() {
+  onEdit() {
     this.editUser.emit(this.user);
   }
 }
